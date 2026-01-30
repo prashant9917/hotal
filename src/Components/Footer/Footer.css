@@ -1,0 +1,145 @@
+.resort-footer {
+  background: radial-gradient(circle at top, #020617, #020617);
+  color: #e5e7eb;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Wave */
+.footer-wave svg {
+  display: block;
+}
+
+/* Layout */
+.footer-content {
+  max-width: 1200px;
+  margin: auto;
+   padding: 35px 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 40px;
+}
+
+/* Brand */
+.footer-brand h2 {
+  color: #facc15;
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+
+.footer-brand p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #cbd5f5;
+}
+
+/* Feature Cards */
+.footer-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.feature-card {
+  background: linear-gradient(145deg, #020617, #0f172a);
+  padding: 14px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 0 0 transparent;
+  transition: all 0.4s ease;
+}
+
+.feature-card span {
+  font-size: 26px;
+}
+
+.feature-card h4 {
+  margin: 10px 0 6px;
+  color: #facc15;
+  
+}
+
+.feature-card p {
+  font-size: 13px;
+  color: #c7d2fe;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 0 25px rgba(250, 204, 21, 0.25);
+}
+
+/* Contact */
+.footer-contact h3 {
+  color: #facc15;
+  margin-bottom: 10px;
+}
+
+/* Bottom */
+.footer-bottom {
+  text-align: center;
+  padding: 10px;
+  font-size: 13px;
+  background: #020617;
+}
+
+.footer-bottom a {
+  color: #facc15;
+  text-decoration: none;
+}
+
+/* Animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  animation: reveal 1.2s ease forwards;
+}
+
+.delay-1 {
+  animation-delay: 0.4s;
+}
+
+.delay-2 {
+  animation-delay: 0.7s;
+}
+
+@keyframes reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer-features {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Social Icons */
+.social-icons {
+  display: flex;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.social-icons a {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #020617, #0f172a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #facc15;
+  font-size: 18px;
+  transition: all 0.35s ease;
+  box-shadow: 0 0 0 transparent;
+}
+
+.social-icons a:hover {
+  transform: translateY(-6px) scale(1.05);
+  box-shadow: 0 0 20px rgba(250, 204, 21, 0.35);
+  color: #fff;
+}

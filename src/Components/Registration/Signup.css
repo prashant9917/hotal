@@ -1,0 +1,140 @@
+/* 🌤 Soft Luxury Background */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:
+    radial-gradient(circle at top left, #eef2ff, transparent 60%),
+    radial-gradient(circle at bottom right, #fdf2f8, transparent 60%),
+    #f8fafc;
+}
+
+/* 🧊 Floating Card */
+.login-card {
+  width: 100%;
+  max-width: 430px;
+  padding: 38px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  border-radius: 26px;
+  box-shadow:
+    0 40px 80px rgba(15, 23, 42, 0.08),
+    0 15px 30px rgba(15, 23, 42, 0.05);
+}
+
+/* Floating animation */
+.premium-float {
+  animation: floatCard 6s ease-in-out infinite;
+}
+
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Titles */
+.login-title {
+  font-size: 30px;
+  font-weight: 800;
+  text-align: center;
+  color: #0f172a;
+}
+
+.login-subtitle {
+  text-align: center;
+  color: #64748b;
+  margin-bottom: 30px;
+}
+
+/* Inputs */
+.input-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 16px 18px 16px 50px;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  font-size: 14px;
+  transition: all 0.4s ease;
+}
+
+.input-group input:focus {
+  border-color: #a5b4fc;
+  box-shadow: 0 0 0 5px rgba(165, 180, 252, 0.25);
+}
+
+.input-icon {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  transition: 0.3s;
+}
+
+.input-group input:focus + .input-icon {
+  color: #6366f1;
+}
+
+/* Premium Button */
+.premium-btn {
+  width: 100%;
+  padding: 16px;
+  border-radius: 18px;
+  border: none;
+  background: linear-gradient(135deg, #c7d2fe, #e9d5ff);
+  color: #1e293b;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Button shine */
+.premium-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,0.6),
+    transparent
+  );
+  transition: 0.6s;
+}
+
+.premium-btn:hover::before {
+  left: 100%;
+}
+
+/* Divider & link */
+.divider {
+  text-align: center;
+  margin: 26px 0;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.signup-text {
+  text-align: center;
+  font-size: 14px;
+}
+
+.signup-text a {
+  color: #6366f1;
+  font-weight: 600;
+  text-decoration: none;
+}

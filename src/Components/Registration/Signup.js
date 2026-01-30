@@ -1,92 +1,131 @@
 
-import React, { useEffect, useState } from "react"
-import axios from "axios"
-import { useNavigate, Link } from "react-router-dom"
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate, Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import {
+  FaUser,
+  FaEnvelope,
+  FaPhoneAlt,
+  FaLock,
+  FaUserPlus
+} from "react-icons/fa";
+import "./Signup.css";
 
+const containerAnim = {
+  hidden: { opacity: 0, y: 60 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.9, ease: "easeOut" }
+  }
+};
+
+const formAnim = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.12 }
+  }
+};
+
+const inputAnim = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, ease: "easeOut" }
+  }
+};
 
 function Signup() {
-    const history = useNavigate();
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+    cpassword: ""
+  });
+  const [loading, setLoading] = useState(false);
 
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [phone, setPhone] = useState('')
-    const [password, setPassword] = useState('')
-    const [cpassword, setCpassword] = useState('')
+  const handleChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
-    async function submit(e) {
-        e.preventDefault();
-        console.log('submit')
-        try {
-
-            await axios.post("http://localhost:4500/signup", {
-                name, email, phone, password, cpassword 
-            })
-                .then(res => {
-                    if (res.data == "exist") {
-                        alert("User already exists")
-                    }
-                    else if (res.data == "notexist") {
-                        history("/home", { state: { id: name } })
-                    }
-                })
-                .catch(e => {
-                    alert("wrong details")
-                    console.log(e);
-                })
-
-        }
-        catch (e) {
-            console.log(e);
-
-        }
-
+  const submit = async (e) => {
+    e.preventDefault();
+    if (formData.password !== formData.cpassword) {
+      alert("Passwords do not match");
+      return;
     }
 
+    setLoading(true);
+    try {
+      const res = await axios.post("http://localhost:4500/signup", formData);
+      if (res.data === "exist") alert("User already exists");
+      else navigate("/login");
+    } catch (err) {
+      alert("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    return (
-        <div className="signup">
+  return (
+    <div className="login-container">
+      <motion.div
+        className="login-card premium-float"
+        variants={containerAnim}
+        initial="hidden"
+        animate="visible"
+      >
+        <h1 className="login-title">Create Account</h1>
+        <p className="login-subtitle">Join the premium experience ✨</p>
 
-            <h1 className="form-title">Sign up</h1>
-            <div className="form-group">
-                <form action="POST">
-                    <i className="zmdi zmdi-account"></i>
-                    <input type="text"
-                        name="name" id="name"
-                        onChange={(e) => { setName(e.target.value) }}
-                        placeholder="Enter Your Name" /><br />
+        <motion.form
+          onSubmit={submit}
+          variants={formAnim}
+          initial="hidden"
+          animate="visible"
+        >
+          {[
+            { icon: <FaUser />, name: "name", type: "text", placeholder: "Full Name" },
+            { icon: <FaEnvelope />, name: "email", type: "email", placeholder: "Email Address" },
+            { icon: <FaPhoneAlt />, name: "phone", type: "tel", placeholder: "Phone Number" },
+            { icon: <FaLock />, name: "password", type: "password", placeholder: "Password" },
+            { icon: <FaLock />, name: "cpassword", type: "password", placeholder: "Confirm Password" }
+          ].map((field, i) => (
+            <motion.div className="input-group" variants={inputAnim} key={i}>
+              <span className="input-icon">{field.icon}</span>
+              <input
+                type={field.type}
+                name={field.name}
+                placeholder={field.placeholder}
+                onChange={handleChange}
+                required
+              />
+            </motion.div>
+          ))}
 
-                    <i className="zmdi zmdi-email"></i>
-                    <input type="email"
-                        name="email" id="email"
-                        onChange={(e) => { setEmail(e.target.value) }}
-                        placeholder="Enter Your Email" /> <br />
+          <motion.button
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            className="premium-btn"
+            type="submit"
+            disabled={loading}
+          >
+            <FaUserPlus />
+            {loading ? "Creating Account..." : "Sign Up"}
+          </motion.button>
+        </motion.form>
 
-                    <i className="zmdi zmdi-phone-ring"></i>
-                    <input type="number"
-                        name="number" id="number"
-                        onChange={(e) => { setPhone(e.target.value) }}
-                        placeholder="Enter Your Number" /><br />
+        <div className="divider">OR</div>
 
-                    <i className="zmdi zmdi-lock"></i>
-                    <input type="password"
-                        name="password" id="password"
-                        onChange={(e) => { setPassword(e.target.value) }}
-                        placeholder="Enter Your Password" /><br />
-
-                    <i className="zmdi zmdi-lock"></i>
-                    <input type="password"
-                        name="cpassword" id="cpassword"
-                        onChange={(e) => { setCpassword(e.target.value) }}
-                        placeholder="Enter Confirm Password" /><br /><br />
-                        <input type="submit" onClick={submit} className="form-submit" /> 
-                </form><br />
-                <h3>OR</h3><br />
-                
-               <p className="sign-end">You are Already Signup  <Link to="/login">Login Here</Link></p>
-            </div>
-        </div>
-    )
+        <p className="signup-text">
+          Already have an account? <Link to="/login">Login</Link>
+        </p>
+      </motion.div>
+    </div>
+  );
 }
 
-export default Signup
-
+export default Signup;

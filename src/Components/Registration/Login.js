@@ -1,73 +1,92 @@
 
-import React, { useEffect, useState } from "react"
-import axios from "axios"
-import { useNavigate, Link } from "react-router-dom"
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate, Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import "./Login.css";
 
+const Login = () => {
+  const navigate = useNavigate();
 
-function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-    const history=useNavigate();
+  const submit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-    const [email,setEmail]=useState('')
-    const [password,setPassword]=useState('')
+    try {
+      const res = await axios.post("http://localhost:4500/login", {
+        email,
+        password,
+      });
 
-    async function submit(e){
-        e.preventDefault();
-
-        try{
-
-            await axios.post("http://localhost:4500/",{
-               email,password, 
-            })
-            .then(res=>{
-                if(res.data=="exist"){
-                    history("/home",{state:{id:email}})
-                }
-                else if(res.data=="notexist"){
-                    alert("User have not sign up")
-                }
-            })
-            .catch(e=>{
-                alert("wrong details")
-                console.log(e);
-            })
-
+      if (res.data.status === "exist") {
+        // 🔐 Role based redirection
+        if (res.data.role === "admin") {
+          navigate("/admin-dashboard", { state: { email } });
+        } else {
+          navigate("/home", { state: { email } });
         }
-        catch(e){
-            console.log(e);
-
-        }
-
+      } else {
+        alert("User does not exist. Please sign up.");
+      }
+    } catch (error) {
+      alert("Invalid email or password");
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
+  };
 
+  return (
+    <div className="login-container">
+      <motion.div
+        className="login-card"
+        initial={{ opacity: 0, y: 60 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <h1 className="login-title">Welcome Back </h1>
+        <p className="login-subtitle">Login to continue</p>
 
-    return (
-        <div className="signup">
+        <form onSubmit={submit}>
+          <motion.input
+            whileFocus={{ scale: 1.03 }}
+            type="email"
+            placeholder="Email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
 
-        <h1 className="form-title">Log In</h1>
-        <div className="form-group">
-            <form action="POST">
+          <motion.input
+            whileFocus={{ scale: 1.03 }}
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-                <i className="zmdi zmdi-email"></i>
-                <input type="email"
-                    name="email" id="email"
-                    onChange={(e) => { setEmail(e.target.value) }}
-                    placeholder="Enter Your Email" /> <br />
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            disabled={loading}
+            type="submit"
+          >
+            {loading ? "Logging in..." : "Login"}
+          </motion.button>
+        </form>
 
-                <i className="zmdi zmdi-lock"></i>
-                <input type="password"
-                    name="password" id="password"
-                    onChange={(e) => { setPassword(e.target.value) }}
-                    placeholder="Enter Your Password" /><br />
-             
-                    <input type="submit" onClick={submit} className="form-submit" /> 
-            </form><br />
-            <h3>OR</h3><br />
-            
-           <p className="sign-end">You are Already Login  <Link to="/signup">SignUp Here</Link></p>
-        </div>
+        <div className="divider">OR</div>
+
+        <p className="signup-text">
+          Don’t have an account? <Link to="/signup">Sign up</Link>
+        </p>
+      </motion.div>
     </div>
-    )
-}
+  );
+};
 
-export default Login
+export default Login;

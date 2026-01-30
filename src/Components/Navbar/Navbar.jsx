@@ -1,49 +1,79 @@
-// import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { FaAlignRight } from "react-icons/fa";
+import {
+  FaAlignRight,
+  FaHome,
+  FaBed,
+  FaChevronDown,
+  FaUserPlus,
+  FaSignInAlt,
+  FaBullhorn,
+  FaPaintBrush,
+  FaSearch
+} from "react-icons/fa";
 import Logo from "../../assets/img/svg/logo.svg";
-import React, { useState } from "react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
-  const handleToggle = () => {
-    setIsOpen((prev) => !prev);
+  /* Close dropdown when clicking outside */
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  /* Close menu on link click (mobile friendly) */
+  const closeAll = () => {
+    setIsOpen(false);
+    setIsDropdownOpen(false);
   };
 
   return (
     <nav className="navbar">
       <div className="nav-center">
         <div className="nav-header">
-          {/* App Logo */}
-          <Link to="/">
-            <img src={Logo} alt="Beach Resort Logo" />
+          <Link to="/" onClick={closeAll}>
+            <img src={Logo} alt="Logo" />
           </Link>
 
-          {/* Toggle Button */}
-          <button
-            type="button"
-            className="nav-btn"
-            aria-label="Toggle navigation menu"
-            onClick={handleToggle}
-          >
+          <button className="nav-btn" onClick={() => setIsOpen(!isOpen)}>
             <FaAlignRight className="nav-icon" />
           </button>
         </div>
 
-        {/* Navigation Links */}
         <ul className={`nav-links ${isOpen ? "show-nav" : ""}`}>
+          {/* HOME */}
           <li>
-            <Link to="/">Home</Link>
+            <Link to="/" onClick={closeAll}>
+              <FaHome /> Home
+            </Link>
           </li>
+
+          {/* ROOMS */}
           <li>
-            <Link to="/rooms">Rooms</Link>
+            <Link to="/rooms" onClick={closeAll}>
+              <FaBed /> Rooms
+            </Link>
           </li>
+          {/* SIGN UP */}
           <li>
-            <Link to="/signup">Sign Up</Link>
+            <Link to="/signup" onClick={closeAll}>
+              <FaUserPlus /> Sign Up
+            </Link>
           </li>
+
+          {/* LOGIN */}
           <li>
-            <Link to="/login">Login</Link>
+            <Link to="/login" onClick={closeAll}>
+              <FaSignInAlt /> Login
+            </Link>
           </li>
         </ul>
       </div>
